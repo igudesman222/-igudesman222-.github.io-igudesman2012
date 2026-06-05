@@ -322,12 +322,12 @@
         
         // 各階段的起始幀索引（方便跳轉）
         const chapters = [
-            { name: "開場", start: 0 },
-            { name: "口交階段", start: 1 },
-            { name: "乳交階段", start: 7 },
-            { name: "插入階段", start: 10 },
-            { name: "高潮收尾", start: 13 }
-        ];
+    { name: "開場 / 前戲", start: 0 },      // frame_01 ~ frame_02：初始插入、近距離特寫
+    { name: "抽插階段", start: 3 },         // frame_03 開始明顯抽插動作
+    { name: "激烈撞擊", start: 7 },         // frame_07 開始液體更多、動作更猛
+    { name: "表情特寫", start: 10 },        // frame_10 開始出現完整臉部（Perona 驚訝/喘息表情）
+    { name: "高潮收尾", start: 13 }         // frame_13 開始大量噴射、臉部被精液覆蓋
+];
         
         // 對白池（依階段變化）
         const moanPools = {
