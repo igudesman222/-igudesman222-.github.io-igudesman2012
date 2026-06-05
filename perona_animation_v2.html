@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perona 連環高潮動畫 v2</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&amp;family=Creepster&amp;display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0f0a1f;
+            color: #e0b3ff;
+            font-family: 'Noto Sans TC', system-ui, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 15px 20px;
+            background: #1a1433;
+            border-bottom: 3px solid #c084fc;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.4rem;
+            color: #e0b3ff;
+            text-shadow: 0 0 15px #c084fc;
+            letter-spacing: 3px;
+        }
+        
+        .header p {
+            margin: 5px 0 0;
+            color: #c084fc;
+            font-size: 1rem;
+        }
+        
+        .main-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .player-box {
+            background: #1a1433;
+            border: 4px solid #c084fc;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8);
+        }
+        
+        .image-area {
+            position: relative;
+            background: #120e28;
+            min-height: 620px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        #display-image {
+            max-width: 100%;
+            max-height: 620px;
+            width: auto;
+            height: auto;
+            display: block;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 0 40px rgba(192, 132, 252, 0.3);
+        }
+        
+        .moan-overlay {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(26, 20, 51, 0.92);
+            color: #f0d0ff;
+            padding: 8px 28px;
+            border-radius: 999px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            border: 2px solid #c084fc;
+            text-shadow: 0 0 12px #c084fc;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .controls {
+            padding: 22px 28px;
+            background: #120e28;
+            border-top: 3px solid #c084fc;
+        }
+        
+        .top-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        
+        button {
+            padding: 11px 24px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .btn-play {
+            background: linear-gradient(#c084fc, #a855f7);
+            color: #1a1433;
+            min-width: 130px;
+            font-size: 1.15rem;
+        }
+        
+        .btn-secondary {
+            background: #1a1433;
+            color: #e0b3ff;
+            border: 2px solid #c084fc;
+        }
+        
+        .btn-danger {
+            background: #4c1d95;
+            color: #f0d0ff;
+            border: 2px solid #c084fc;
+        }
+        
+        .btn-climax {
+            background: linear-gradient(#f472b6, #db2777);
+            color: white;
+            border: 2px solid #f472b6;
+            box-shadow: 0 0 15px #f472b6;
+        }
+        
+        .speed-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 280px;
+        }
+        
+        .speed-row input[type="range"] {
+            flex: 1;
+            accent-color: #c084fc;
+        }
+        
+        .speed-value {
+            min-width: 70px;
+            text-align: right;
+            font-weight: bold;
+            color: #e0b3ff;
+        }
+        
+        .phase-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .phase-btn {
+            padding: 8px 18px;
+            font-size: 0.95rem;
+        }
+        
+        .progress-container {
+            margin: 12px 0 8px;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: #1a1433;
+            border-radius: 999px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #c084fc;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #c084fc, #f0d0ff);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #c084fc;
+            font-size: 0.95rem;
+            margin-top: 6px;
+        }
+        
+        .settings-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .setting-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .setting-item label {
+            font-size: 0.95rem;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #a78bfa;
+            font-size: 0.9rem;
+        }
+        
+        .audio-status {
+            font-size: 0.85rem;
+            color: #c084fc;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>👻 Perona 連環高潮動畫 v2</h1>
+        <p>可自訂速度 • 循環播放 • 慢動作 • 高潮特寫 • 喘息音效</p>
+    </div>
+    
+    <div class="main-container">
+        <div class="player-box">
+            <!-- Image Area -->
+            <div class="image-area" id="image-area">
+                <img id="display-image" src="frame_01.jpg" alt="Perona">
+                <div class="moan-overlay" id="moan-text">嗯…</div>
+            </div>
+            
+            <div class="controls">
+                <!-- Top Controls -->
+                <div class="top-controls">
+                    <button class="btn-play" id="play-btn">▶ 播放</button>
+                    <button class="btn-secondary" id="prev-btn">◀ 上一格</button>
+                    <button class="btn-secondary" id="next-btn">下一格 ▶</button>
+                    
+                    <div class="speed-row">
+                        <span>速度</span>
+                        <input type="range" id="speed-slider" min="80" max="1800" step="20" value="420">
+                        <span class="speed-value" id="speed-value">0.42s</span>
+                    </div>
+                    
+                    <button class="btn-climax" id="climax-btn">💦 高潮特寫模式</button>
+                </div>
+                
+                <!-- Phase / Chapter Buttons -->
+                <div class="phase-buttons">
+                    <button class="btn-secondary phase-btn" onclick="jumpToChapter(0)">開場</button>
+                    <button class="btn-secondary phase-btn" onclick="jumpToChapter(1)">口交階段</button>
+                    <button class="btn-secondary phase-btn" onclick="jumpToChapter(2)">乳交階段</button>
+                    <button class="btn-secondary phase-btn" onclick="jumpToChapter(3)">插入階段</button>
+                    <button class="btn-secondary phase-btn" onclick="jumpToChapter(4)">高潮收尾</button>
+                </div>
+                
+                <!-- Progress -->
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="info-row">
+                        <span id="frame-info">第 01 / 17 格</span>
+                        <span id="chapter-info">開場</span>
+                    </div>
+                </div>
+                
+                <!-- Settings -->
+                <div class="settings-row">
+                    <div class="setting-item">
+                        <input type="checkbox" id="loop-check" checked>
+                        <label for="loop-check">循環播放</label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <input type="checkbox" id="audio-check" checked>
+                        <label for="audio-check">喘息音效</label>
+                        <span class="audio-status" id="audio-status">開啟</span>
+                    </div>
+                    
+                    <button class="btn-secondary" onclick="slowMotion()">🐢 慢動作 (3秒)</button>
+                    <button class="btn-danger" onclick="resetToNormal()">重置速度</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            目前 17 幀 • 可自行增加更多圖片（修改下方 panels 陣列即可）<br>
+            建議把新圖片命名為 frame_18.jpg、frame_19.jpg… 並加入陣列
+        </div>
+    </div>
+
+    <script>
+        // ==================== 配置區（可自行修改） ====================
+        // 目前幀列表（可自行增加更多）
+        const panels = [
+            "frame_01.jpg", "frame_02.jpg", "frame_03.jpg", "frame_04.jpg",
+            "frame_05.jpg", "frame_06.jpg", "frame_07.jpg", "frame_08.jpg",
+            "frame_09.jpg", "frame_10.jpg", "frame_11.jpg", "frame_12.jpg",
+            "frame_13.jpg", "frame_14.jpg", "frame_15.jpg", "frame_16.jpg",
+            "frame_17.jpg"
+            // ← 在這裡繼續加入新幀，例如 "frame_18.jpg", "frame_19.jpg"
+        ];
+        
+        // 各階段的起始幀索引（方便跳轉）
+        const chapters = [
+            { name: "開場", start: 0 },
+            { name: "口交階段", start: 1 },
+            { name: "乳交階段", start: 7 },
+            { name: "插入階段", start: 10 },
+            { name: "高潮收尾", start: 13 }
+        ];
+        
+        // 對白池（依階段變化）
+        const moanPools = {
+            0: ["嗯…", "哈啊…", "女王的味道…"],           // 開場
+            1: ["嗯嗯…好棒…", "嗚啊…", "要融化了…"],       // 口交
+            2: ["胸…好熱…", "啊…要去了…", "嗚嗚…"],       // 乳交
+            3: ["進來了…", "好深…！", "啊啊啊…"],           // 插入
+            4: ["要射了…！", "嗚啊啊啊啊！！", "高潮了…"]  // 高潮
+        };
+        
+        // ==================== 變數 ====================
+        let currentIndex = 0;
+        let isPlaying = false;
+        let playInterval = null;
+        let isLoop = true;
+        let audioEnabled = true;
+        let audioContext = null;
+        let currentChapter = 0;
+        
+        // ==================== DOM 元素 ====================
+        const displayImage = document.getElementById('display-image');
+        const moanText = document.getElementById('moan-text');
+        const playBtn = document.getElementById('play-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const speedSlider = document.getElementById('speed-slider');
+        const speedValue = document.getElementById('speed-value');
+        const progressFill = document.getElementById('progress-fill');
+        const frameInfo = document.getElementById('frame-info');
+        const chapterInfo = document.getElementById('chapter-info');
+        const loopCheck = document.getElementById('loop-check');
+        const audioCheck = document.getElementById('audio-check');
+        const audioStatus = document.getElementById('audio-status');
+        const climaxBtn = document.getElementById('climax-btn');
+        
+        // ==================== 音效（Web Audio API 喘息聲） ====================
+        function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.warn('瀏覽器不支援 AudioContext');
+            }
+        }
+        
+        function playBreathSound(intensity = 1) {
+            if (!audioEnabled || !audioContext) return;
+            
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                const filter = audioContext.createBiquadFilter();
+                
+                // 低頻喘息聲
+                oscillator.type = 'sine';
+                oscillator.frequency.value = 85 + Math.random() * 25;
+                
+                filter.type = 'lowpass';
+                filter.frequency.value = 420;
+                
+                // 音量包絡（短促喘息）
+                const now = audioContext.currentTime;
+                gain.gain.value = 0.0001;
+                gain.gain.linearRampToValueAtTime(0.18 * intensity, now + 0.06);
+                gain.gain.linearRampToValueAtTime(0.0001, now + 0.45);
+                
+                // 連接
+                oscillator.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                oscillator.start(now);
+                oscillator.stop(now + 0.6);
+            } catch (e) {}
+        }
+        
+        function playMoanSound() {
+            if (!audioEnabled || !audioContext) return;
+            
+            try {
+                // 較長的呻吟聲
+                const osc1 = audioContext.createOscillator();
+                const osc2 = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                const filter = audioContext.createBiquadFilter();
+                
+                osc1.type = 'sine';
+                osc2.type = 'sawtooth';
+                osc1.frequency.value = 95;
+                osc2.frequency.value = 82;
+                
+                filter.type = 'lowpass';
+                filter.frequency.value = 380;
+                
+                const now = audioContext.currentTime;
+                gain.gain.value = 0.0001;
+                gain.gain.linearRampToValueAtTime(0.22, now + 0.12);
+                gain.gain.linearRampToValueAtTime(0.0001, now + 1.1);
+                
+                osc1.connect(filter);
+                osc2.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                osc1.start(now);
+                osc2.start(now);
+                osc1.stop(now + 1.3);
+                osc2.stop(now + 1.3);
+            } catch (e) {}
+        }
+        
+        // ==================== 核心功能 ====================
+        function updateDisplay(index) {
+            currentIndex = index;
+            
+            // 更新圖片
+            displayImage.style.opacity = '0';
+            setTimeout(() => {
+                displayImage.src = panels[index];
+                displayImage.style.opacity = '1';
+            }, 120);
+            
+            // 更新進度
+            const progress = ((index + 1) / panels.length) * 100;
+            progressFill.style.width = progress + '%';
+            
+            // 更新資訊
+            frameInfo.textContent = `第 ${String(index + 1).padStart(2, '0')} / ${panels.length} 格`;
+            
+            // 更新章節
+            updateChapterInfo(index);
+            
+            // 更新對白
+            updateMoanText(index);
+            
+            // 隨機觸發喘息聲
+            if (audioEnabled && Math.random() < 0.65) {
+                setTimeout(() => {
+                    if (currentIndex === index) playBreathSound(0.7 + Math.random() * 0.6);
+                }, 80);
+            }
+        }
+        
+        function updateChapterInfo(index) {
+            let chapterName = "進行中";
+            for (let i = chapters.length - 1; i >= 0; i--) {
+                if (index >= chapters[i].start) {
+                    chapterName = chapters[i].name;
+                    currentChapter = i;
+                    break;
+                }
+            }
+            chapterInfo.textContent = chapterName;
+        }
+        
+        function updateMoanText(index) {
+            let poolKey = 0;
+            if (index >= 13) poolKey = 4;
+            else if (index >= 10) poolKey = 3;
+            else if (index >= 7) poolKey = 2;
+            else if (index >= 1) poolKey = 1;
+            
+            const pool = moanPools[poolKey] || moanPools[0];
+            moanText.textContent = pool[Math.floor(Math.random() * pool.length)];
+        }
+        
+        function nextFrame() {
+            let next = currentIndex + 1;
+            
+            if (next >= panels.length) {
+                if (isLoop) {
+                    next = 0;
+                } else {
+                    stopPlaying();
+                    return;
+                }
+            }
+            updateDisplay(next);
+        }
+        
+        function prevFrame() {
+            let prev = currentIndex - 1;
+            if (prev < 0) prev = panels.length - 1;
+            updateDisplay(prev);
+        }
+        
+        function startPlaying() {
+            if (isPlaying) return;
+            isPlaying = true;
+            playBtn.textContent = '⏸ 暫停';
+            
+            const intervalTime = parseInt(speedSlider.value);
+            
+            playInterval = setInterval(() => {
+                nextFrame();
+            }, intervalTime);
+        }
+        
+        function stopPlaying() {
+            isPlaying = false;
+            playBtn.textContent = '▶ 播放';
+            if (playInterval) {
+                clearInterval(playInterval);
+                playInterval = null;
+            }
+        }
+        
+        function togglePlay() {
+            if (isPlaying) {
+                stopPlaying();
+            } else {
+                startPlaying();
+            }
+        }
+        
+        function jumpToChapter(chapterIndex) {
+            stopPlaying();
+            const startFrame = chapters[chapterIndex].start;
+            updateDisplay(startFrame);
+            
+            // 高潮階段自動觸發較長呻吟
+            if (chapterIndex === 4) {
+                setTimeout(() => {
+                    if (audioEnabled) playMoanSound();
+                }, 200);
+            }
+        }
+        
+        function slowMotion() {
+            stopPlaying();
+            speedSlider.value = 1400;
+            speedValue.textContent = '1.40s';
+            startPlaying();
+            
+            // 3秒後自動恢復正常速度
+            setTimeout(() => {
+                if (isPlaying) {
+                    speedSlider.value = 420;
+                    speedValue.textContent = '0.42s';
+                    stopPlaying();
+                    startPlaying();
+                }
+            }, 3000);
+        }
+        
+        function resetToNormal() {
+            stopPlaying();
+            speedSlider.value = 420;
+            speedValue.textContent = '0.42s';
+        }
+        
+        function enterClimaxMode() {
+            stopPlaying();
+            // 跳到高潮段落並放慢
+            updateDisplay(13);
+            speedSlider.value = 1100;
+            speedValue.textContent = '1.10s';
+            
+            // 啟動慢速循環播放
+            isLoop = true;
+            loopCheck.checked = true;
+            startPlaying();
+            
+            // 每隔一段時間觸發強呻吟
+            const moanInterval = setInterval(() => {
+                if (!isPlaying || currentIndex < 13) {
+                    clearInterval(moanInterval);
+                    return;
+                }
+                if (audioEnabled) playMoanSound();
+            }, 1800);
+            
+            // 15秒後自動結束特寫模式
+            setTimeout(() => {
+                if (isPlaying && currentIndex >= 13) {
+                    speedSlider.value = 420;
+                    speedValue.textContent = '0.42s';
+                    stopPlaying();
+                    alert('高潮特寫模式結束');
+                }
+            }, 15000);
+        }
+        
+        // ==================== 事件綁定 ====================
+        function bindEvents() {
+            // 播放按鈕
+            playBtn.addEventListener('click', togglePlay);
+            
+            // 前後切換
+            prevBtn.addEventListener('click', () => {
+                stopPlaying();
+                prevFrame();
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                stopPlaying();
+                nextFrame();
+            });
+            
+            // 速度滑桿
+            speedSlider.addEventListener('input', () => {
+                const val = parseInt(speedSlider.value);
+                speedValue.textContent = (val / 1000).toFixed(2) + 's';
+                
+                if (isPlaying) {
+                    stopPlaying();
+                    startPlaying();
+                }
+            });
+            
+            // 進度條點擊跳轉
+            document.getElementById('progress-bar').addEventListener('click', (e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const percent = (e.clientX - rect.left) / rect.width;
+                const target = Math.floor(percent * (panels.length - 1));
+                stopPlaying();
+                updateDisplay(target);
+            });
+            
+            // 循環開關
+            loopCheck.addEventListener('change', () => {
+                isLoop = loopCheck.checked;
+            });
+            
+            // 音效開關
+            audioCheck.addEventListener('change', () => {
+                audioEnabled = audioCheck.checked;
+                audioStatus.textContent = audioEnabled ? '開啟' : '關閉';
+            });
+            
+            // 高潮特寫按鈕
+            climaxBtn.addEventListener('click', enterClimaxMode);
+            
+            // 鍵盤控制
+            document.addEventListener('keydown', (e) => {
+                if (e.key === ' ' || e.key === 'Spacebar') {
+                    e.preventDefault();
+                    togglePlay();
+                }
+                if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    stopPlaying();
+                    nextFrame();
+                }
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    stopPlaying();
+                    prevFrame();
+                }
+                if (e.key.toLowerCase() === 'c') {
+                    enterClimaxMode();
+                }
+            });
+            
+            // 點擊圖片也可切換下一格
+            displayImage.addEventListener('click', () => {
+                stopPlaying();
+                nextFrame();
+            });
+        }
+        
+        // ==================== 初始化 ====================
+        function initPlayer() {
+            initAudio();
+            
+            // 顯示第一張
+            updateDisplay(0);
+            
+            // 綁定事件
+            bindEvents();
+            
+            // 初始設定
+            speedValue.textContent = (parseInt(speedSlider.value) / 1000).toFixed(2) + 's';
+            loopCheck.checked = isLoop;
+            audioCheck.checked = audioEnabled;
+            
+            // 歡迎對白
+            setTimeout(() => {
+                moanText.textContent = "來吧…玩弄我…";
+            }, 800);
+            
+            console.log('%c[Perona v2] 動畫播放器已啟動', 'color:#c084fc');
+        }
+        
+        window.onload = initPlayer;
+    </script>
+</body>
+</html>
